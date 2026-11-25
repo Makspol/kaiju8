@@ -1,0 +1,166 @@
+# Kaiju8
+
+Kaiju8 is a low-code AI assistant builder. Users can create workflows with triggers, logic, data transformations, actions, credentials, knowledge, and AI agent nodes.
+
+## Backend
+
+The backend is a FastAPI app with raw SQLite migrations, direct user ownership, workflow execution logs, scheduler/http triggers, node registry, knowledge items, credentials, and AI agent nodes.
+
+### Environment
+
+Create an env file from [.env.example](./.env.example).
+
+Linux/macOS:
+
+```bash
+cp .env.example .env
+```
+
+Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Edit `.env` if you need AI provider keys:
+
+```env
+GEMINI_API_KEY=
+ANTHROPIC_API_KEY=
+```
+
+### Setup
+
+Linux/macOS:
+
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+```
+
+Windows PowerShell:
+
+```powershell
+cd backend
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
+
+If PowerShell blocks activation, run:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+### Run
+
+Linux/macOS:
+
+```bash
+cd backend
+source .venv/bin/activate
+python -m uvicorn app.main:app --reload
+```
+
+Windows PowerShell:
+
+```powershell
+cd backend
+.\.venv\Scripts\Activate.ps1
+python -m uvicorn app.main:app --reload
+```
+
+Swagger API docs:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+### Test
+
+Linux/macOS:
+
+```bash
+cd backend
+source .venv/bin/activate
+python -m pytest -q
+```
+
+Windows PowerShell:
+
+```powershell
+cd backend
+.\.venv\Scripts\Activate.ps1
+python -m pytest -q
+```
+
+## Frontend
+
+The frontend is a Vite app. It expects the backend to run on port `8000`.
+
+Linux/macOS and Windows PowerShell:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open:
+
+```text
+http://127.0.0.1:5173
+```
+
+## Docker
+
+Run the full stack:
+
+```bash
+docker compose up --build
+```
+
+Frontend:
+
+```text
+http://localhost:5173
+```
+
+Backend:
+
+```text
+http://localhost:8000
+```
+
+## Local Database
+
+The backend uses SQLite for local development. Database files such as `backend/kaiju8.db` are ignored by Git, so your local users, workflows, credentials metadata, and executions are not pushed to the repository.
+
+If you want a clean local state, stop the backend and remove your local DB file.
+
+Linux/macOS:
+
+```bash
+cd backend
+rm -f kaiju8.db
+```
+
+Windows PowerShell:
+
+```powershell
+cd backend
+Remove-Item kaiju8.db -ErrorAction SilentlyContinue
+```
+
+The backend will create a new database automatically on the next start.
+
+For Docker, local database data lives in the Docker volume. To reset it:
+
+```bash
+docker compose down -v
+```
+
+This removes the local Docker database volume.
